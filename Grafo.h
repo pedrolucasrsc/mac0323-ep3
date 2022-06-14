@@ -1,38 +1,64 @@
 #include "Bag.h"
 #include "Fila.h"
+#include "arvore23.h"
 #include <iostream>
 
 class Grafo {
  private:
- public:
   int V = 0, E = 0;
-  Bag<int> *adj = nullptr;
+  TsA23<std::string,int> dict;
+  void cal_dist(int u, int **dist);
+ public:
+  Bag<int> *adj = new Bag<int>[0];
   Grafo() {};
   ~Grafo() {if (adj != nullptr) delete [] adj;};
   // métodos
   void le();
+  int vertices() {return V;};
+  int edges() {return E;};
   void limpa();
-  void distancias(int u, int **dist);
+  void distancias(std::string u, int **dist);
   void componentes(int *ncomp,int **comp);
 };
 
 void Grafo::le() {
+  // Lê grafo e retorna V
   std::cin >> V >> E;
+  int contv = 0;
   adj = new Bag<int>[V];
   for (int i = 0; i < E; i++) {
-	int u,v;
+	std::string u, v;
 	std::cin >> u >> v;
-	adj[u].add(v);
-	adj[v].add(u);
+    if (!dict.isIn(u))
+	  dict.add(u,contv++);
+	if (!dict.isIn(v))
+	  dict.add(v,contv++);
+	int iu = dict.value(u), iv = dict.value(v);
+	adj[iu].add(iv);
+	adj[iv].add(iu);
   }
+  return;
 }
 
 void Grafo::limpa() {
   V = E = 0;
-  adj = nullptr;
+  adj = new Bag<int>[0];
+  dict = TsA23<std::string,int>();
 }
 
-void Grafo::distancias(int u, int **distPointer) {
+void Grafo::distancias(std::string u, int **distPointer) {
+  if (!dict.isIn(u)) {
+	int *dist;
+	dist = new int[V];
+	for (int i = 0; i < V; i++)
+	  dist[i] = -1;
+	*distPointer = dist;
+	return;
+  }
+  return cal_dist(dict.value(u), distPointer);
+}
+
+void Grafo::cal_dist(int u, int **distPointer) {
   /*
    *  recebe vértice e apontador para vetor das distâncias
    *  devolve o vetor de distâncias ao vértice u
@@ -64,7 +90,8 @@ void Grafo::componentes(int *ncomp,int **compPointer) {
    *  recebe ponteiro para #componentes e vetor comp[V]
    *  devolve o vetor com o tamanho de cada componente
    */
-  int cont = 0, comp[V];
+  int cont = 0, *comp;
+  comp = new int[V];
   bool visitado[V];
   for (int i = 0; i < V; i++) {
 	visitado[i] = false;
@@ -94,7 +121,9 @@ void Grafo::componentes(int *ncomp,int **compPointer) {
 	  }
 	  cont++;
 	}
-
+  for (int i = 0; i < cont; i++)
+	std::cout << comp[i] << " ";
+  std::cout << "\n";
   *ncomp = cont;
   *compPointer = comp;
   return;
