@@ -1,3 +1,6 @@
+#ifndef GRAFO_H
+#define GRAFO_H
+
 #include "Bag.h"
 #include "Fila.h"
 #include "arvore23.h"
@@ -121,10 +124,9 @@ void Grafo::componentes(int *ncomp,int **compPointer) {
 	  }
 	  cont++;
 	}
-  for (int i = 0; i < cont; i++)
-	std::cout << comp[i] << " ";
-  std::cout << "\n";
   *ncomp = cont;
   *compPointer = comp;
   return;
 }
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef FILA_H
+#define FILA_H
+
 #include <iostream>
 #define SIZE 1000
 
@@ -57,3 +60,5 @@ Item Fila<Item>::peek() {
   }
   return v[front];
 }
+
+#endif
