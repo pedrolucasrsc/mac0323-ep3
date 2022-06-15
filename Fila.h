@@ -25,11 +25,12 @@ void Fila<Item>::resize() {
   Item *tempV = new Item[2*tamV];
   int i = 0, j = front;
   do {
-	tempV[i] = v[j];
+	tempV[i++] = v[j];
 	j = (j+1)%tamV;
   } while (j != front);
   front = 0;
   rear = tamV-1;
+  tamV = 2*tamV;
   v = tempV;
 }
 
