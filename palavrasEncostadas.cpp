@@ -17,13 +17,13 @@ int main() {
     palavraN
 
     e produzirá entrada padrão para grafo de acordo
-    com as palavras que estarão encostadas:
-
+    com as palavras que estarão "encostadas"
    */
 
   TsA23<std::string,std::vector<std::string>> dict;
   int V, E = 0;
 
+  // https://panda.ime.usp.br/panda/static/pythonds_pt/07-Grafos/BuildingtheWordLadderGraph.html Algoritmo de "buckets" para word ladders
   std::cin >> V;
   for (int v = 0; v < V; v++) {
 	std::string word;
@@ -45,6 +45,7 @@ int main() {
     }
   }
 
+  // Guarda cada adjacência em fila (precisamos imprimir E primeiro)
   Fila<std::string> fila;
   for (int i = 0; i < dict.size(); i++) {
 	std::string bucket = dict.select(i);
@@ -53,7 +54,6 @@ int main() {
 	for (int iw = 0; iw < wv.size(); iw++) {
 	  for (int jw = iw+1; jw < wv.size(); jw++) {
 		std::string u = wv[iw], v = wv[jw];
-		//	std::cout << u << " " << v << "\n";
 		fila.enqueue(u);
 		fila.enqueue(v);
 		E++;
@@ -61,6 +61,7 @@ int main() {
 	}
   }
 
+  // Output em saída para grafo
   std::cout << V << " " << E << "\n";
   while (!fila.isEmpty()) {
 	std::string u = fila.dequeue(), v = fila.dequeue();
