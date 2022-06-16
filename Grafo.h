@@ -9,12 +9,13 @@
 class Grafo {
  private:
   int V = 0, E = 0;
-  TsA23<std::string,int> dict;
   void cal_dist(int u, int **dist);
  public:
+  TsA23<std::string,int> dict;
+  std::string *nomes = new std::string[0];
   Bag<int> *adj = new Bag<int>[0];
   Grafo() {};
-  ~Grafo() {if (adj != nullptr) delete [] adj;};
+  ~Grafo() {if (adj != nullptr) delete [] adj; if (nomes != nullptr) delete [] nomes;};
   // métodos
   void le();
   int vertices() {return V;};
@@ -29,13 +30,18 @@ void Grafo::le() {
   std::cin >> V >> E;
   int contv = 0;
   adj = new Bag<int>[V];
+  nomes = new std::string[V];
   for (int i = 0; i < E; i++) {
 	std::string u, v;
 	std::cin >> u >> v;
-    if (!dict.isIn(u))
-	  dict.add(u,contv++);
-	if (!dict.isIn(v))
-	  dict.add(v,contv++);
+    if (!dict.isIn(u)) {
+	  dict.add(u,contv);
+	  nomes[contv++] = u;
+	}
+	if (!dict.isIn(v)) {
+	  dict.add(v,contv);
+	  nomes[contv++] = v;
+	}
 	int iu = dict.value(u), iv = dict.value(v);
 	adj[iu].add(iv);
 	adj[iv].add(iu);
@@ -50,13 +56,21 @@ void Grafo::limpa() {
 }
 
 void Grafo::distancias(std::string u, int **distPointer) {
+  // Vértice desconhecido
   if (!dict.isIn(u)) {
-	int *dist;
-	dist = new int[V];
-	for (int i = 0; i < V; i++)
-	  dist[i] = -1;
-	*distPointer = dist;
-	return;
+	// Vértice fora do Grafo
+	if (dict.size() == V) {
+	  int *dist;
+	  dist = new int[V];
+	  for (int i = 0; i < V; i++)
+		dist[i] = -1;
+      *distPointer = dist;
+	  return;
+	}
+	// Assume que conhecemos esse vértice sem adjacências agora
+	else {
+	  dict.add(u,dict.size());
+	}
   }
   return cal_dist(dict.value(u), distPointer);
 }
