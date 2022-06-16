@@ -23,6 +23,8 @@ class Grafo {
   void limpa();
   void distancias(std::string u, int **dist);
   void componentes(int *ncomp,int **comp);
+  void qualComp(int **comp);
+  void quemComp(Bag<int> **comp);
 };
 
 void Grafo::le() {
@@ -141,6 +143,72 @@ void Grafo::componentes(int *ncomp,int **compPointer) {
   *ncomp = cont;
   *compPointer = comp;
   return;
+}
+
+void Grafo::qualComp(int **compPointer) {
+  /* Recebe ponteiro para guardar no vetor comp[] qual componente está vertice i em comp[i] */
+  int cont = 0, *comp;
+  comp = new int[V];
+  for (int i = 0; i < V; i++) {
+	comp[i] = -1;
+  }
+
+  // percorre todos vértices não visitados
+  for (int v = 0; v < V; v++)
+	if (comp[v] == -1) {
+	  // nova componente
+	  comp[v] = cont++;
+	  // bfs em v
+	  Fila<int> fila;
+	  fila.enqueue(v);
+	  while(!fila.isEmpty()) {
+		int u = fila.dequeue();
+		for (int i = 0; i < adj[u].size(); i++) {
+		  int v = adj[u].at(i);
+		  if (comp[v] == -1) {
+			comp[v] = comp[u];
+			fila.enqueue(v);
+		  }
+		}
+	  }
+	}
+  *compPointer = comp;
+  return;
+}
+
+void Grafo::quemComp(Bag<int> **compPointer) {
+  int cont = 0;
+  bool visitado[V];
+  Bag<int> *comp;
+  comp = new Bag<int>[V];
+  for (int i = 0; i < V; i++) {
+	visitado[i] = false;
+  }
+
+  // percorre todos vértices não visitados
+  for (int v = 0; v < V; v++)
+	if (!visitado[v]) {
+	  visitado[v] = true;
+	  // nova componente
+	  comp[cont].add(v);
+	  // bfs em v
+	  Fila<int> fila;
+	  fila.enqueue(v);
+	  while(!fila.isEmpty()) {
+		int u = fila.dequeue();
+		for (int i = 0; i < adj[u].size(); i++) {
+		  int v = adj[u].at(i);
+		  if (!visitado[v]) {
+			visitado[v] = true;
+			comp[cont].add(v);
+			fila.enqueue(v);
+		  }
+		}
+	  }
+	  cont++;
+	}
+  *compPointer = comp;
+  return;  
 }
 
 #endif
