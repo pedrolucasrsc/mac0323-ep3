@@ -16,9 +16,14 @@ int main() {
   std::cout << "\t" << E << " arestas\n";
   std::cout << "\t" << ncomp << " componentes\n";
   int max = 0;
-  for (int i = 0; i < ncomp; i++)
+  double tamMedio = 0;
+  for (int i = 0; i < ncomp; i++) {
 	if (max < tamComp[i])
 	  max = tamComp[i];
+    tamMedio += tamComp[i];
+  }
+  tamMedio /= ncomp;
   std::cout << "Sua maior componente tem " << max << " vértices!!\n";
+  std::cout << "O tamanho médio das componentes é " << tamMedio << "\n";
   
 }

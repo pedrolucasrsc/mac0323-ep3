@@ -128,12 +128,12 @@ void Grafo::componentes(int *ncomp,int **compPointer) {
 	  fila.enqueue(u); 
 
 	  while(!fila.isEmpty()) {
-		u = fila.dequeue();
-		for (int i = 0; i < adj[u].size(); i++) {
-		  int v = adj[u].at(i);
-		  if (!visitado[v]) {
-			visitado[v] = true;
-			fila.enqueue(v);
+		int v = fila.dequeue();
+		for (int i = 0; i < adj[v].size(); i++) {
+		  int w = adj[v].at(i);
+		  if (!visitado[w]) {
+			visitado[w] = true;
+			fila.enqueue(w);
 			comp[cont]++; // incrementa o tamanho desta componente
 		  }
 		}
@@ -154,20 +154,21 @@ void Grafo::qualComp(int **compPointer) {
   }
 
   // percorre todos vértices não visitados
-  for (int v = 0; v < V; v++)
-	if (comp[v] == -1) {
+  for (int u = 0; u < V; u++)
+	if (comp[u] == -1) {
 	  // nova componente
-	  comp[v] = cont++;
-	  // bfs em v
-	  Fila<int> fila;
-	  fila.enqueue(v);
+	  comp[u] = cont++;
+	  // bfs em u
+	  Fila<int> fila(V);
+	  fila.enqueue(u);
+	  
 	  while(!fila.isEmpty()) {
-		int u = fila.dequeue();
-		for (int i = 0; i < adj[u].size(); i++) {
-		  int v = adj[u].at(i);
-		  if (comp[v] == -1) {
-			comp[v] = comp[u];
-			fila.enqueue(v);
+		int v = fila.dequeue();
+		for (int i = 0; i < adj[v].size(); i++) {
+		  int w = adj[v].at(i);
+		  if (comp[w] == -1) {
+			comp[w] = comp[v];
+			fila.enqueue(w);
 		  }
 		}
 	  }
@@ -186,22 +187,23 @@ void Grafo::quemComp(Bag<int> **compPointer) {
   }
 
   // percorre todos vértices não visitados
-  for (int v = 0; v < V; v++)
-	if (!visitado[v]) {
-	  visitado[v] = true;
+  for (int u = 0; u < V; u++)
+	if (!visitado[u]) {
+	  visitado[u] = true;
 	  // nova componente
-	  comp[cont].add(v);
-	  // bfs em v
-	  Fila<int> fila;
-	  fila.enqueue(v);
+	  comp[cont].add(u);
+	  // bfs em u
+	  Fila<int> fila(V);
+	  fila.enqueue(u);
+	  
 	  while(!fila.isEmpty()) {
-		int u = fila.dequeue();
-		for (int i = 0; i < adj[u].size(); i++) {
-		  int v = adj[u].at(i);
-		  if (!visitado[v]) {
-			visitado[v] = true;
-			comp[cont].add(v);
-			fila.enqueue(v);
+		int v = fila.dequeue();
+		for (int i = 0; i < adj[v].size(); i++) {
+		  int w = adj[v].at(i);
+		  if (!visitado[w]) {
+			visitado[w] = true;
+			comp[cont].add(w);
+			fila.enqueue(w);
 		  }
 		}
 	  }
