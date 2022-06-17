@@ -12,5 +12,5 @@ palavrasEncostadas.out: Fila.h arvore23.h palavrasEncostadas.cpp
 arestasAleatorias.out: Grafo.h Fila.h arestasAleatorias.cpp
 	g++ -w -o arestasAleatorias.out arestasAleatorias.cpp
 clean:
-	rm *.o
+	rm *.out
 

@@ -34,13 +34,17 @@ int main() {
   std::cout << "\t" << V << " vértices\n";
   std::cout << "\t" << E << " arestas\n";
   std::cout << "\t" << ncomp << " componentes\n";
-  int maxdist = 0;
+  int maxdist = 0, contadist6 = 0;
   std::string vdist = u;
-  for (int i = 0; i < tamComp[imax]; i++)
+  for (int i = 0; i < V; i++) {
 	if (maxdist < dist[i]) {
 	  maxdist = dist[i];
 	  vdist = graph.nomes[i];
 	}
+	if (0 < dist[i] && dist[i] <= 6)
+	  contadist6++;
+  }
   std::cout << "A componente de " << u << " tem " << tamComp[comp[iu]] << " vértices:\n";
+  std::cout << u << " está conectada a " << contadist6 << " vértices numa distâncias menor que 6\n";
   std::cout << u << "----" << vdist << " tem a maior distância de " << maxdist << " na componente!!\n";
 }
