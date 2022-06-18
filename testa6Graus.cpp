@@ -32,19 +32,17 @@ int main() {
     std::string u = graph.nomes[iu];
     //    std::cout << u << "\n";
     graph.distancias(u,&dist);
-    for (int j = iu+1; j < tamComp[imax]; j++) {
+    for (int j = i+1; j < tamComp[imax]; j++) {
       int iv = elemComp[imax].at(j);
       if (maxdist < dist[iv]) {
         maxdist = dist[iv];
         vdistante = graph.nomes[iv];
         udistante = u;
       }
-      if (0 < dist[iv]) {
-        media += dist[iv];
-        n++;
-        if (dist[iv] <= 6)
-          contadist6++;
-      }
+      media += dist[iv];
+      n++;
+      if (dist[iv] <= 6)
+        contadist6++;
     }
   }
   media /= n;
